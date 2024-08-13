@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Review Game - Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: repeating-conic-gradient(#f0d9b5 0% 25%, #b58863 0% 50%) 
+                        50% / 100px 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 2em;
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 {
+            color: #4a4a4a;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+        .chess-piece {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+        .form-container {
+            background-color: white;
+            padding: 1.5em;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #b58863;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #b58863;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #8b4513;
+        }
+        .error {
+            color: #d32f2f;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .youtube-link {
+            text-align: center;
+            margin-top: 1em;
+            font-size: 0.9em;
+        }
+        .youtube-link a {
+            color: #4a4a4a;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .youtube-link a:hover {
+            color: #b58863;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="chess-piece">♔</div>
+        <h1>Chess Review Game</h1>
+        <div class="form-container">
+            <form action="/login" method="post">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            {% if error %}
+            <p class="error">{{ error }}</p>
+            {% endif %}
+        </div>
+        <div class="youtube-link">
+            <p>Follow my channel: <a href="https://www.youtube.com/@analysis_chess_channel" target="_blank">Analysis Chess Channel</a></p>
+        </div>
+    </div>
+</body>
+</html>

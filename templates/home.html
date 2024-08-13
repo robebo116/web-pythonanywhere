@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Review Game - Home</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: repeating-conic-gradient(#f0d9b5 0% 25%, #b58863 0% 50%) 
+                        50% / 100px 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 2em;
+            max-width: 800px;
+            width: 90%;
+        }
+        h1 {
+            color: #4a4a4a;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+        .chess-piece {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+        .form-container {
+            background-color: white;
+            padding: 1.5em;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .text-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="text"] {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #b58863;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        button {
+            width: auto;
+            min-width: 100px;
+            padding: 10px 20px;
+            margin: 10px 20px;
+            background-color: #b58863;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #8b4513;
+        }
+        .youtube-link {
+            text-align: center;
+            margin-bottom: 1em;
+            font-size: 1.1em;
+        }
+        .youtube-link a {
+            color: #b58863;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .youtube-link a:hover {
+            color: #8b4513;
+        }
+        #countdownContainer {
+            margin-top: 10px;
+            font-weight: bold;
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="chess-piece">♖</div>
+        <h1>Chess Review Game</h1>
+        <div class="youtube-link">
+            <p>Follow my channel: <a href="https://www.youtube.com/@analysis_chess_channel/?sub_confirmation=1" target="_blank">Analysis Chess Channel</a></p>
+        </div>
+        <div class="form-container">
+            <form id="linkForm">
+                <input type="text" id="linkInput" placeholder="Enter chess.com link" required>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <div id="countdownContainer">
+            Please wait: <span id="countdown">15</span> seconds
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('linkForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var link = document.getElementById('linkInput').value;
+            var submitButton = document.querySelector('button[type="submit"]');
+            
+            // Làm mờ và vô hiệu hóa nút Submit
+            submitButton.style.opacity = '0.5';
+            submitButton.style.pointerEvents = 'none';
+
+            fetch('/send-link', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'link=' + encodeURIComponent(link)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    startCountdown();
+                } else {
+                    alert('Error: ' + data.message);
+                    // Hiển thị lại nút Submit nếu có lỗi
+                    submitButton.style.opacity = '1';
+                    submitButton.style.pointerEvents = 'auto';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while sending the link.');
+                // Hiển thị lại nút Submit nếu có lỗi
+                submitButton.style.opacity = '1';
+                submitButton.style.pointerEvents = 'auto';
+            });
+        });
+
+        function startCountdown() {
+            var countdownElement = document.getElementById('countdown');
+            var countdownContainer = document.getElementById('countdownContainer');
+            var submitButton = document.querySelector('button[type="submit"]');
+            var linkInput = document.getElementById('linkInput');
+            var seconds = 15;
+
+            countdownContainer.style.display = 'block';
+
+            var countdownInterval = setInterval(function() {
+                countdownElement.textContent = seconds;
+                seconds--;
+                
+                if (seconds < 0) {
+                    clearInterval(countdownInterval);
+                    countdownContainer.style.display = 'none';
+                    linkInput.value = ''; // Xóa nội dung của input
+                    // Hiển thị lại nút Submit
+                    submitButton.style.opacity = '1';
+                    submitButton.style.pointerEvents = 'auto';
+                }
+            }, 1000);
+        }
+
+    </script>
+
+</body>
+</html>
